@@ -1,0 +1,95 @@
+div {
+  max-width: 100%;
+  padding: 0px;
+}
+
+body {
+  max-width: 100%;
+}
+body #header {
+  background-color: rgb(233, 173, 167);
+}
+body .middle {
+  box-shadow: 5px 5px 10px black;
+  display: flex;
+  flex-direction: row;
+  font-family: "DM Sans";
+}
+body .middle .left {
+  max-width: 40px;
+  width: 40px;
+  background-color: aliceblue;
+  border-left: 5px solid #af9221;
+}
+body .middle .content {
+  width: 100%;
+  max-width: 850px;
+  background-color: aliceblue;
+}
+body .middle .content .headliner {
+  text-align: center;
+  line-height: 0;
+  padding-top: 25px;
+}
+body .middle .content .headliner .my_name {
+  text-transform: uppercase;
+  min-height: 4vh;
+}
+body .middle .content .headliner .my_name span {
+  color: #af9221;
+}
+body .middle .content .headliner .classification_line {
+  justify-content: space-evenly;
+  display: flex;
+  text-transform: uppercase;
+  font-size: 80%;
+  min-height: 2.8vh;
+}
+body .middle .content .headliner .classification_line div {
+  width: 50%;
+}
+body .middle .content .headliner .contact_line {
+  justify-content: center;
+  display: flex;
+  height: 10%;
+  font-size: 66%;
+}
+body .middle .content .headliner .contact_line div {
+  min-width: 24%;
+}
+body .middle .content .headliner .contact_line .email {
+  padding-left: 1.5%;
+}
+body .middle .content .headliner .contact_line .cell {
+  border-left: 3px solid #af9221;
+  border-right: 3px solid #af9221;
+  border-radius: 5px;
+}
+body .middle .content .resume_content {
+  padding: 1% 1% 25px 1%;
+  line-height: 0;
+}
+body .middle .content .resume_content .title {
+  text-transform: uppercase;
+  border-top: 3px solid black;
+  font-size: 90%;
+  font-weight: bold;
+  line-height: 1;
+  min-height: 3vh;
+}
+body .middle .content .resume_content .degree, body .middle .content .resume_content .work_position {
+  display: flex;
+  justify-content: space-between;
+}
+body .middle .content .resume_content p {
+  font-size: x-small;
+}
+body .middle .right {
+  max-width: 40px;
+  width: 33px;
+  background-color: aliceblue;
+  border-right: 5px solid #af9221;
+}
+body .footer {
+  background-color: rgb(233, 173, 167);
+}/*# sourceMappingURL=resume_ss.css.map */
