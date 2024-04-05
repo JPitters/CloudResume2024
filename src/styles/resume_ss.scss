@@ -8,8 +8,6 @@ div {
 }
 
 body {
-    //display: inline;
-    //justify-content: center;
     width: 100%;
     padding: 0;
     margin: 0;
@@ -23,6 +21,7 @@ body {
         min-width: 100%;
         display: flex;
         justify-content: center;
+        margin-top: 25px;
     }
 
     .middle_inner {
