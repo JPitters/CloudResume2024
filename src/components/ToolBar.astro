@@ -1,0 +1,110 @@
+---
+const WS_EVENT_NAME = "jordans-dev-toolbar";
+const HOVER_DELAY = 2 * 1e3;
+const DEVBAR_HITBOX_ABOVE = 42;
+
+class AstroDevToolbar extends HTMLElement {
+    shadowRoot;
+    delayedHideTimeout;
+    devToolbarContainer;
+    apps = [];
+    hasBeenInitialized = false;
+    // TODO: This should be dynamic based on the screen size or at least configurable, erika - 2023-11-29
+    customAppsToShow = 3;
+    constructor() {
+        super();
+        this.shadowRoot = this.attachShadow({ mode: "open" });
+    }
+
+
+    attachEvents() {
+    const items = this.shadowRoot.querySelectorAll(".item");
+    items.forEach((item) => {
+        item.addEventListener("click", async (event) => {
+        const target = event.currentTarget;
+            if (!target || !(target instanceof HTMLElement))
+            return;
+            const id = target.dataset.appId;
+            if (!id)
+            return;
+            const app = this.getAppById(id);
+            if (!app)
+            return;
+            event.stopPropagation();
+            await this.toggleAppStatus(app);
+        });
+    });
+
+    ["mouseenter", "focusin"].forEach((event) => {
+        this.devToolbarContainer.addEventListener(event, () => {
+        this.clearDelayedHide();
+            if (this.isHidden()) {
+            this.setToolbarVisible(true);
+            }
+        });
+    });
+        
+    ["mouseleave", "focusout"].forEach((event) => {
+        this.devToolbarContainer.addEventListener(event, () => {
+        this.clearDelayedHide();
+            if (this.getActiveApp() || this.isHidden()) {
+            return;
+            }
+            this.triggerDelayedHide();
+        });
+    });
+    
+    document.addEventListener("keyup", (event) => {
+        if (event.key !== "Escape")
+        return;
+        if (this.isHidden())
+        return;
+        const activeApp = this.getActiveApp();
+        if (activeApp) {
+        this.toggleAppStatus(activeApp);
+        } else {
+        this.setToolbarVisible(false);
+        }
+    });
+    }
+
+    clearDelayedHide() {
+        window.clearTimeout(this.delayedHideTimeout);
+        this.delayedHideTimeout = void 0;
+    }
+
+    triggerDelayedHide() {
+        this.clearDelayedHide();
+        this.delayedHideTimeout = window.setTimeout(() => {
+        this.setToolbarVisible(false);
+        this.delayedHideTimeout = void 0;
+        }, HOVER_DELAY);
+    }
+    
+    setToolbarVisible(newStatus) {
+    const barContainer = this.shadowRoot.querySelector("#bar-container");
+    const devBar = this.shadowRoot.querySelector("#dev-bar");
+    const devBarHitboxAbove = this.shadowRoot.querySelector("#dev-bar-hitbox-above");
+    
+    if (newStatus === true) {
+        this.devToolbarContainer?.removeAttribute("data-hidden");
+        barContainer?.removeAttribute("inert");
+        devBar?.removeAttribute("tabindex");
+        if (devBarHitboxAbove)
+            devBarHitboxAbove.style.height = "0";
+        return;
+    }
+    
+    if (newStatus === false) {
+        this.devToolbarContainer?.setAttribute("data-hidden", "");
+        barContainer?.setAttribute("inert", "");
+        devBar?.setAttribute("tabindex", "0");
+        if (devBarHitboxAbove)
+            devBarHitboxAbove.style.height = `${DEVBAR_HITBOX_ABOVE}px`;
+        return;
+    }
+    }
+}
+
+
+---
