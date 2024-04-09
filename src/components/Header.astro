@@ -1,5 +1,5 @@
 ---
-//import ToolBar from "../components/ToolBar.astro";
+import JordansToolbar from "../components/ToolBar.astro";
 ---
 
 <div
@@ -21,6 +21,9 @@
     <!-- End (right-most) section of navbar -->
     <div class="navbar-end">
       <!-- Toolbar -->
+      <JordansToolbar>lol</JordansToolbar>
+      
+      <!--
       <style>
         :host {
           /* Important! Reset all inherited styles to initial */
@@ -267,7 +270,8 @@
         <div id="dev-bar-hitbox-below"></div>
       </div>
       </jordan-dev-toolbar>
-
+    -->
+      
       <!-- Theme Selector (whole + dropdown) -->
       <div title="Change Theme" class="dropdown dropdown-end" id="theme-selector"> 
         <div tabindex="0" class="btn gap-1 normal-case btn-ghost"> 
@@ -355,6 +359,10 @@
         }); 
       
         document.addEventListener("astro:after-swap", () => changeThemeBehavior(document));
+
+        //let customElementRegistry = window.customElements;
+        //console.log(JordansToolbar);
+        //customElementRegistry.define("JordansToolbar", JordansToolbar);
       </script>
     </div>
   </div>

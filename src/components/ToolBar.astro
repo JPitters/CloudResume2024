@@ -1,110 +1,416 @@
 ---
-const WS_EVENT_NAME = "jordans-dev-toolbar";
-const HOVER_DELAY = 2 * 1e3;
-const DEVBAR_HITBOX_ABOVE = 42;
-
-class AstroDevToolbar extends HTMLElement {
-    shadowRoot;
-    delayedHideTimeout;
-    devToolbarContainer;
-    apps = [];
-    hasBeenInitialized = false;
-    // TODO: This should be dynamic based on the screen size or at least configurable, erika - 2023-11-29
-    customAppsToShow = 3;
-    constructor() {
-        super();
-        this.shadowRoot = this.attachShadow({ mode: "open" });
-    }
-
-
-    attachEvents() {
-    const items = this.shadowRoot.querySelectorAll(".item");
-    items.forEach((item) => {
-        item.addEventListener("click", async (event) => {
-        const target = event.currentTarget;
-            if (!target || !(target instanceof HTMLElement))
-            return;
-            const id = target.dataset.appId;
-            if (!id)
-            return;
-            const app = this.getAppById(id);
-            if (!app)
-            return;
-            event.stopPropagation();
-            await this.toggleAppStatus(app);
-        });
-    });
-
-    ["mouseenter", "focusin"].forEach((event) => {
-        this.devToolbarContainer.addEventListener(event, () => {
-        this.clearDelayedHide();
-            if (this.isHidden()) {
-            this.setToolbarVisible(true);
-            }
-        });
-    });
-        
-    ["mouseleave", "focusout"].forEach((event) => {
-        this.devToolbarContainer.addEventListener(event, () => {
-        this.clearDelayedHide();
-            if (this.getActiveApp() || this.isHidden()) {
-            return;
-            }
-            this.triggerDelayedHide();
-        });
-    });
-    
-    document.addEventListener("keyup", (event) => {
-        if (event.key !== "Escape")
-        return;
-        if (this.isHidden())
-        return;
-        const activeApp = this.getActiveApp();
-        if (activeApp) {
-        this.toggleAppStatus(activeApp);
-        } else {
-        this.setToolbarVisible(false);
-        }
-    });
-    }
-
-    clearDelayedHide() {
-        window.clearTimeout(this.delayedHideTimeout);
-        this.delayedHideTimeout = void 0;
-    }
-
-    triggerDelayedHide() {
-        this.clearDelayedHide();
-        this.delayedHideTimeout = window.setTimeout(() => {
-        this.setToolbarVisible(false);
-        this.delayedHideTimeout = void 0;
-        }, HOVER_DELAY);
-    }
-    
-    setToolbarVisible(newStatus) {
-    const barContainer = this.shadowRoot.querySelector("#bar-container");
-    const devBar = this.shadowRoot.querySelector("#dev-bar");
-    const devBarHitboxAbove = this.shadowRoot.querySelector("#dev-bar-hitbox-above");
-    
-    if (newStatus === true) {
-        this.devToolbarContainer?.removeAttribute("data-hidden");
-        barContainer?.removeAttribute("inert");
-        devBar?.removeAttribute("tabindex");
-        if (devBarHitboxAbove)
-            devBarHitboxAbove.style.height = "0";
-        return;
-    }
-    
-    if (newStatus === false) {
-        this.devToolbarContainer?.setAttribute("data-hidden", "");
-        barContainer?.setAttribute("inert", "");
-        devBar?.setAttribute("tabindex", "0");
-        if (devBarHitboxAbove)
-            devBarHitboxAbove.style.height = `${DEVBAR_HITBOX_ABOVE}px`;
-        return;
-    }
-    }
-}
-
+//import { createHotContext as __vite__createHotContext } from "/@vite/client";
+//import.meta.hot = __vite__createHotContext("/node_modules/astro/dist/runtime/client/dev-toolbar/toolbar.js?v=736de75c");
+import { getIconElement, isDefinedIcon } from "/node_modules/astro/dist/runtime/client/dev-toolbar/ui-library/icons.js?v=736de75c";
 
 ---
+
+<jordans-toolbar />
+
+<script>
+    const WS_EVENT_NAME = "jordans-toolbar";
+    const HOVER_DELAY = 2 * 1e3;
+    const TOOLBAR_HITBOX_BELOW = 42;
+
+    class JordansToolbar extends HTMLElement {
+        shadowRoot;
+        delayedHideTimeout;
+        toolbarContainer;
+        apps = [];
+        hasBeenInitialized = false;
+
+        // TODO: This should be dynamic based on the screen size or at least configurable
+        //customAppsToShow = 3;
+        constructor() {
+            super();
+            this.shadowRoot = this.attachShadow({ mode: "open" });
+            this.tb_init();
+        }
+
+        connectedCallback() {
+            console.log("Custom element added to page.");
+        }
+
+        disconnectedCallback() {
+            console.log("Custom element removed from page.");
+        }
+
+        tb_init() {
+            console.log("Init");
+
+            this.shadowRoot.innerHTML = `
+                <style>
+                    :host {
+                        all: initial;
+                        z-index: 999999;
+                        view-transition-name: jordans-toolbar;
+                        display: contents;
+                    }
+
+                    ::view-transition-old(jordans-toolbar),
+                    ::view-transition-new(jordans-toolbar) {
+                        animation: none;
+                    }
+
+                    #toolbar-root {
+                        position: fixed;
+                        top: 0px;
+                        left: 0%;
+                        z-index: 2000000010;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        transition: top 0.35s cubic-bezier(0.485, -0.050, 0.285, 1.505);
+                        pointer-events: none;
+                    }
+
+                    #toolbar-root[data-hidden] {
+                        top: -40px;
+                    }
+
+                    #toolbar-root[data-hidden] #tool-bar .item {
+                        opacity: 0.2;
+                    }
+
+                    #tool-bar-hitbox-above,
+                    #tool-bar-hitbox-below {
+                        width: 100%;
+                        pointer-events: auto;
+                    }
+                    #tool-bar-hitbox-above {
+                        height: 16px;
+                    }
+                    #tool-bar-hitbox-below {
+                        height: ${TOOLBAR_HITBOX_BELOW}px;
+                    }
+                    #tool-bar {
+                        height: 40px;
+                        overflow: hidden;
+                        pointer-events: auto;
+                        background: linear-gradient(180deg, #13151A 0%, rgba(19, 21, 26, 0.88) 100%);
+                        border: 1px solid #343841;
+                        border-radius: 9999px;
+                        box-shadow: 0px 0px 0px 0px rgba(19, 21, 26, 0.30), 0px 1px 2px 0px rgba(19, 21, 26, 0.29), 0px 4px 4px 0px rgba(19, 21, 26, 0.26), 0px 10px 6px 0px rgba(19, 21, 26, 0.15), 0px 17px 7px 0px rgba(19, 21, 26, 0.04), 0px 26px 7px 0px rgba(19, 21, 26, 0.01);
+                    }
+
+                    @media (forced-colors: active) {
+                        #tool-bar {
+                            background: white;
+                        }
+                    }
+
+                    #tool-bar .item {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        width: 44px;
+                        border: 0;
+                        background: transparent;
+                        color: white;
+                        font-family: system-ui, sans-serif;
+                        font-size: 1rem;
+                        line-height: 1.2;
+                        white-space: nowrap;
+                        text-decoration: none;
+                        padding: 0;
+                        margin: 0;
+                        overflow: hidden;
+                        transition: opacity 0.2s ease-out 0s;
+                    }
+
+                    #tool-bar #tool-bar-container .item:hover, #tool-bar #tool-bar-container .item:focus-visible {
+                        background: #FFFFFF20;
+                        cursor: pointer;
+                        outline-offset: -3px;
+                    }
+
+                    #tool-bar #tool-bar-container .item[data-app-error]:hover, #tool-bar #tool-bar-container .item[data-app-error]:focus-visible {
+                        cursor: not-allowed;
+                        background: #ff252520;
+                    }
+
+                    #tool-bar .item:first-of-type {
+                        border-top-left-radius: 9999px;
+                        border-bottom-left-radius: 9999px;
+                        width: 42px;
+                        padding-left: 4px;
+                    }
+
+                    #tool-bar .item:last-of-type {
+                        border-top-right-radius: 9999px;
+                        border-bottom-right-radius: 9999px;
+                        width: 42px;
+                        padding-right: 4px;
+                    }
+                    #tool-bar #tool-bar-container .item.active {
+                        background: rgba(71, 78, 94, 1);
+                    }
+
+                    #tool-bar .item-tooltip {
+                        background: linear-gradient(0deg, #13151A, #13151A), linear-gradient(0deg, #343841, #343841);
+                        border: 1px solid rgba(52, 56, 65, 1);
+                        border-radius: 4px;
+                        padding: 4px 8px;
+                        position: absolute;
+                        bottom: ${4 - TOOLBAR_HITBOX_BELOW}px;
+                        font-size: 14px;
+                        opacity: 0;
+                        transition: opacity 0.2s ease-in-out 0s;
+                        pointer-events: none;
+                        user-select: none;
+                    }
+
+                    #tool-bar .item-tooltip::after{
+                        content: '';
+                        position: absolute;
+                        left: calc(50% - 5px);
+                        bottom: -6px;
+                        border-left: 5px solid transparent;
+                        border-right: 5px solid transparent;
+                        border-top: 5px solid #343841;
+                    }
+
+                    #tool-bar .item[data-app-error] .icon {
+                        opacity: 0.35;
+                    }
+
+                    #tool-bar .item:hover .item-tooltip, #tool-bar .item:not(.active):focus-visible .item-tooltip {
+                        transition: opacity 0.2s ease-in-out 200ms;
+                        opacity: 1;
+                    }
+
+                    @media (forced-colors: active) {
+                        #tool-bar .item:hover .item-tooltip,
+                        #tool-bar .item:not(.active):focus-visible .item-tooltip {
+                            background: white;
+                        }
+                    }
+
+                    #tool-bar #tool-bar-container .item.active .notification rect, #tool-bar #tool-bar-container .item.active .notification path {
+                        stroke: rgba(71, 78, 94, 1);
+                    }
+
+                    #tool-bar .item .icon {
+                        position: relative;
+                        max-width: 20px;
+                        max-height: 20px;
+                        user-select: none;
+                    }
+
+                    #tool-bar .item .icon>svg {
+                        width: 20px;
+                        height: 20px;
+                        display: block;
+                        margin: auto;
+                    }
+
+                    @media (forced-colors: active) {
+                        #tool-bar .item svg path[fill="#fff"] {
+                            fill: black;
+                        }
+                    }
+
+                    #tool-bar .item .notification {
+                        display: none;
+                        position: absolute;
+                        top: -4px;
+                        right: -6px;
+                        width: 10px;
+                        height: 10px;
+                    }
+
+                    #tool-bar .item .notification svg {
+                        display: block;
+                    }
+
+                    #toolbar-root:not([data-no-notification]) #tool-bar .item .notification[data-active] {
+                        display: block;
+                    }
+
+                    #tool-bar #tool-bar-container {
+                        height: 100%;
+                        display: flex;
+                    }
+
+                    #tool-bar .separator {
+                        background: rgba(52, 56, 65, 1);
+                        width: 1px;
+                    }
+                </style>
+                <div id="toolbar-root" data-hidden>
+                    <div id="tool-bar-hitbox-above"></div>
+                    <div id="tool-bar">
+                        <div id="tool-bar-container">
+                            
+                            lol
+                        </div>
+                    </div>
+                    <div id="tool-bar-hitbox-below"></div>
+                </div>`;
+            
+            
+
+            this.toolbarContainer = this.shadowRoot.querySelector("#toolbar-root"); //focus the toolbar root
+            this.attachEvents(); //attach mouseenter & mouseleave events for animations
+            
+            // Creates the tooltip canvas for each app within toolbar
+            this.apps.forEach(async (app) => {
+                //settings.logger.verboseLog(`Creating app canvas for ${app.id}`);
+                const appCanvas = document.createElement("jordans-toolbar-app-canvas");
+                appCanvas.dataset.appId = app.id;
+                this.shadowRoot?.append(appCanvas);
+            });
+
+            if ("requestIdleCallback" in window) {
+                window.requestIdleCallback(
+                    async () => {
+                        this.apps.map((app) => this.initApp(app));
+                    },
+                    { timeout: 300 }
+                );
+            } else {
+                setTimeout(async () => {
+                    this.apps.map((app) => this.initApp(app));
+                }, 300);
+            }
+        }
+
+        /* To go within #bar-container
+                ${this.apps.filter((app) => app.builtIn && !["astro:settings", "astro:more"].includes(app.id)).map((app) => this.getAppTemplate(app)).join("")}
+                                ${this.apps.filter((app) => !app.builtIn).length > 0 ? `<div class="separator"></div>${this.apps.filter((app) => !app.builtIn).slice(0, this.customAppsToShow).map((app) => this.getAppTemplate(app)).join("")}` : ""}
+                                ${this.apps.filter((app) => !app.builtIn).length > this.customAppsToShow ? this.getAppTemplate(
+                                    this.apps.find((app) => app.builtIn && app.id === "astro:more")
+                                    ) : ""}
+        */
+        
+        // Attach events to toolbar for animations
+        attachEvents() {
+            /*
+            const items = this.shadowRoot.querySelectorAll(".item");
+            items.forEach((item) => {
+                item.addEventListener("click", async (event) => {
+                const target = event.currentTarget;
+                    if (!target || !(target instanceof HTMLElement))
+                    return;
+                    const id = target.dataset.appId;
+                    if (!id)
+                    return;
+                    const app = this.getAppById(id);
+                    if (!app)
+                    return;
+                    event.stopPropagation();
+                    await this.toggleAppStatus(app);
+                });
+            });
+            */
+
+            // When the mouse enters the div box of #toolbar-root
+            ["mouseenter", "focusin"].forEach((event) => {
+                this.toolbarContainer.addEventListener(event, () => {
+                this.clearDelayedHide();
+                    if (this.isHidden()) {
+                    this.setToolbarVisible(true);
+                    }
+                });
+            });
+            
+            // When the mouse leaves the div box of #toolbar-root
+            ["mouseleave", "focusout"].forEach((event) => {
+
+                this.toolbarContainer.addEventListener(event, () => {
+                    this.clearDelayedHide(); //prep for hide
+                    // if any of the apps are active or the toolbar is already hidden, ignore
+                    if (this.getActiveApp() !== undefined || this.isHidden()) {
+                        console.log("still active...");
+                        //return;
+                    }
+                    console.log("leaving");
+                    this.triggerDelayedHide(); //otherwise hide toolbar
+                });
+            });
+            
+            // Add event listener to keyboard input 
+            document.addEventListener("keyup", (event) => {
+                if (event.key !== "Escape")
+                    return;
+                if (this.isHidden())
+                    return;
+                const activeApp = this.getActiveApp();
+                if (activeApp == undefined) {
+                    //this.toggleAppStatus(activeApp);
+                } else { // -> if user presses escape key, it'll exit the toolbar
+                    this.setToolbarVisible(false);
+                }
+            });
+        }
+
+        getAppTemplate(app) {
+            return `<button class="item" data-app-id="${app.id}">
+                        <div class="icon">${app.icon ? getAppIcon(app.icon) : "?"}<div class="notification"></div></div>
+                        <span class="item-tooltip">${app.name}</span>
+                    </button>`;
+        }
+
+        isHidden() {
+            var res = this.devToolbarContainer?.hasAttribute("data-hidden") ?? true
+            console.log("checking hidden -> " + res);
+            return res;
+        }
+
+        getActiveApp() {
+            var res = this.apps.find((app) => app.active)
+            console.log("checking activity -> " + res);
+            return res;
+        }
+
+        clearDelayedHide() {
+            window.clearTimeout(this.delayedHideTimeout);
+            this.delayedHideTimeout = void 0;
+        }
+
+        triggerDelayedHide() {
+            console.log("Triggering hide");
+            this.clearDelayedHide();
+            this.delayedHideTimeout = window.setTimeout(() => {
+                this.setToolbarVisible(false);
+                this.delayedHideTimeout = void 0;
+            }, HOVER_DELAY);
+            console.log("\ttriggered");
+        }
+        
+        setToolbarVisible(newStatus) {
+            const barContainer = this.shadowRoot.querySelector("#tool-bar-container");
+            const toolBar = this.shadowRoot.querySelector("#tool-bar");
+            const toolBarHitboxBelow = this.shadowRoot.querySelector("#tool-bar-hitbox-below");
+            
+            if (newStatus === true) {
+                this.toolbarContainer?.removeAttribute("data-hidden");
+                barContainer?.removeAttribute("inert");
+                toolBar?.removeAttribute("tabindex");
+                if (toolBarHitboxBelow)
+                    toolBarHitboxBelow.style.height = "0";
+                return;
+            }
+            
+            if (newStatus === false) {
+                this.toolbarContainer?.setAttribute("data-hidden", "");
+                barContainer?.setAttribute("inert", "");
+                toolBar?.setAttribute("tabindex", "0");
+                if (toolBarHitboxBelow)
+                    toolBarHitboxBelow.style.height = `${TOOLBAR_HITBOX_BELOW}px`;
+                return;
+            }
+        }
+    }
+
+    function getAppIcon(icon) {
+    if (isDefinedIcon(icon)) {
+        return getIconElement(icon).outerHTML;
+    }
+    return icon;
+    }
+    
+//let customElementRegistry = window.customElements;
+    customElements.define("jordans-toolbar", JordansToolbar);
+    console.log(document.querySelector("jordans-toolbar"));
+</script>
