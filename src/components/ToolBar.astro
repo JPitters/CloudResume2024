@@ -27,7 +27,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         //customAppsToShow = 3;
         constructor() {
             super();
-            this.shadowRoot = this.attachShadow({ mode: "open" });
+            //this.shadowRoot = this.attachShadow({ mode: "open" });
             this.tb_init();
         }
 
@@ -42,13 +42,12 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         tb_init() {
             //console.log("Init");
 
-            this.shadowRoot.innerHTML = `
+            this.innerHTML = `
                 <style>
                     :host {
                         all: initial;
                         z-index: 999999;
                         view-transition-name: jordans-toolbar;
-                        display: contents;
                     }
 
                     ::view-transition-old(jordans-toolbar),
@@ -59,18 +58,18 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                     #toolbar-root {
                         position: fixed;
                         width: 80%;
-                        top: 0px;
+                        top: -5px;
                         left: 10%;
                         z-index: 2000000010;
                         display: flex;
                         flex-direction: column;
                         align-items: center;
-                        transition: top 0.35s cubic-bezier(0.485, -0.050, 0.285, 1.505);
+                        transition: top 0.39s cubic-bezier(0.485, -0.050, 0.285, 1.505);
                         pointer-events: none;
                     }
 
                     #toolbar-root[data-hidden] {
-                        top: -40px;
+                        top: -50px;
                     }
 
                     #toolbar-root[data-hidden] #tool-bar .item {
@@ -93,7 +92,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                         width: 100%;
                         overflow: hidden;
                         pointer-events: auto;
-                        background: linear-gradient(180deg, #13151A 0%, rgba(19, 21, 26, 0.88) 100%);
+                        
                         border: 1px solid #343841;
                         border-radius: 9999px;
                         box-shadow: 0px 0px 0px 0px rgba(19, 21, 26, 0.30), 0px 1px 2px 0px rgba(19, 21, 26, 0.29), 0px 4px 4px 0px rgba(19, 21, 26, 0.26), 0px 10px 6px 0px rgba(19, 21, 26, 0.15), 0px 17px 7px 0px rgba(19, 21, 26, 0.04), 0px 26px 7px 0px rgba(19, 21, 26, 0.01);
@@ -244,17 +243,23 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                         background: rgba(52, 56, 65, 1);
                         width: 1px;
                     }
+
+                    @media screen and (max-width: 767px) {
+                        #toolbar-root {
+                            display: none;
+                        }
+                    }
                 </style>
-                <div class="hidden" id="toolbar-root" data-hidden>
+                <div id="toolbar-root" data-hidden>
                     <div id="tool-bar-hitbox-above"></div>
 
-                    <div id="tool-bar">
+                    <div id="tool-bar" class="bg-neutral w-2">
                         <div id="tool-bar-container">
-                            <button class="item first" data-app-id="astro:home">
+                            <button class="item" data-app-id="astro:home">
                                 <div class="icon">
                                     <svg fill="currentColor" class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
-                                        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
+                                        <path stroke="#fff" d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
+                                        <path fill="#fff" d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
                                     </svg>
                                     <div class="notification"></div>
                                 </div>
@@ -265,7 +270,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                             <div></div>
 
                             <div class="separator"></div>
-                            <button is="jordans-themes" class="item last" data-app-id="theme-selector"></button>
+                            <button is="jordans-themes" class="item" data-app-id="theme-selector"></button>
                         </div>
                     </div>
                     
@@ -273,7 +278,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                 </div>`;
             
             //this.shadowRoot.querySelector("#tool-bar-container").appendChild( //customElements.define("Theme-Selector", ThemeSelector) );
-            this.toolbarContainer = this.shadowRoot.querySelector("#toolbar-root"); //focus the toolbar root
+            this.toolbarContainer = this.querySelector("#toolbar-root"); //focus the toolbar root
             this.attachEvents(); //attach mouseenter & mouseleave events for animations
             
             // Creates the tooltip canvas for each app within toolbar
@@ -281,7 +286,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                 //settings.logger.verboseLog(`Creating app canvas for ${app.id}`);
                 const appCanvas = document.createElement("jordans-toolbar-app-canvas");
                 appCanvas.dataset.appId = app.id;
-                this.shadowRoot?.append(appCanvas);
+                this.append(appCanvas);
             });
 
             if ("requestIdleCallback" in window) {
@@ -402,9 +407,9 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         }
         
         setToolbarVisible(newStatus) {
-            const barContainer = this.shadowRoot.querySelector("#tool-bar-container");
-            const toolBar = this.shadowRoot.querySelector("#tool-bar");
-            const toolBarHitboxBelow = this.shadowRoot.querySelector("#tool-bar-hitbox-below");
+            const barContainer = this.querySelector("#tool-bar-container");
+            const toolBar = this.querySelector("#tool-bar");
+            const toolBarHitboxBelow = this.querySelector("#tool-bar-hitbox-below");
             
             if (newStatus === true) {
                 this.toolbarContainer?.removeAttribute("data-hidden");
