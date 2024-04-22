@@ -5,7 +5,7 @@ Just a little project to play with cloud solutions
 ## Installation
 
 ~ Disclaimer ~
-This Astro.js project requires a node.js version of 18 or higher, so it is recommended that you have this version or higher to avoid technical difficulties. For reference, I used node v20 & v21.7, while developing this project. 
+This Astro.js (v4.5.16) project requires a node.js version of 18 or higher, so it is recommended that you have this version or higher to avoid technical difficulties. For reference, I used node v20 & v21.7, while developing this project. 
 
 
 Run the following command in your terminal, if using bash:
@@ -32,6 +32,7 @@ npm run dev
 ## Tech Stack
 
 - [Astro](https://astro.build)
+    - [typescript] (strict)
 - [tailwindcss](https://tailwindcss.com/)
 - [DaisyUI](https://daisyui.com/)
 
@@ -152,6 +153,11 @@ This component comes from a template and is included in the Store layout. In cas
   target="Optional link target (_self default)"
 />
 ```
+
+#### Unexplained Components
+
+Some components, like the ToolBar, are in the still in the development stage and a explaination of the full functionalities will be provided when developments reach a milestone of a  certain standard.
+
 
 ### Layouts
 

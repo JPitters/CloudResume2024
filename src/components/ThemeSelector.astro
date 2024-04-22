@@ -1,23 +1,24 @@
 ---
+//import AppInterface from "./AppInterface.astro";
 ---
 
 
 <script>
 
     class ThemeSelector extends HTMLButtonElement {
-        shadowRoot;
 
         constructor () {
             super();
+        }
 
-            //this.shadowRoot = this.attachShadow({ mode: "open" });
+        connectedCallback() {
+            //console.log("Theme Selector added to page.");
             this.createThemeButton();
+            this.initThemeSelection();
         }
 
         createThemeButton() {
-            //var themeButt = document.createElement("div");
-            //themeButt.insertAdjacentHTML(
-            //    'beforeend',
+            
             this.innerHTML =
                 `
                     <div tabindex="0" class="icon"> 
@@ -28,47 +29,153 @@
                     <span class="item-tooltip">Theme</span>
                 `;
         }
+
+        initThemeSelection () {
+            console.log("init theme selection");
+            var container = document.body; //getElementById("jordans-themes-btn");
+            container?.append(document.createElement("jordans-themes-canvas"));
+
+            document.querySelector("jordans-themes-canvas")?.setAttribute("id", "theme-selector-canvas");
+            var themes = document.getElementById("theme-selector-canvas")
+            themes.className = "bg-neutral";
+            themes.style.display = "none"; 
+        }
+
+        dropDownSelection () {
+            //this.innerHTML.concat(`<jordans-themes-canvas></jordans-themes-canvas>`);
+            var themes = document.getElementById("theme-selector-canvas");
+            themes.style.display = "block";
+        }
     }
+
+    class ThemeSelectorCanvas extends HTMLElement {
+        //shadowRoot;
+        constructor() {
+            super();
+            //this.shadowRoot = this.attachShadow({ mode: "open" });
+        }
+        connectedCallback() {
+            console.log("Theme Selector Canvas added to page.");
+
+            this.innerHTML = `
+                <style>
+                    /* Hide scrollbar for Chrome, Safari and Opera */
+                    #theme-selector-canvas::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    #theme-selector-canvas {
+                        max-height: 180px;
+                        /*width: min(320px, 100%);*/
+
+                        position: fixed;
+                        z-index: 999999999;
+                        top: 72px;
+                        right: 8.8%;
+                        overflow-y: auto;
+                        -ms-overflow-style: none;  /* IE and Edge */
+                        scrollbar-width: none;  /* Firefox */
+
+                        box-sizing: border-box;
+                        display: block;
+                        flex-direction: column;
+                        border: 1px solid rgba(52, 56, 65, 1);
+                        border-radius: 12px;
+                        padding: 24px;
+
+                        opacity: .95;
+                        /*background: linear-gradient(0deg, #13151A, #13151A), linear-gradient(0deg, #343841, #343841);*/
+                            
+                        box-shadow: 0px 0px 0px 0px rgba(19, 21, 26, 0.30), 
+                            0px 1px 2px 0px rgba(19, 21, 26, 0.29), 
+                            0px 4px 4px 0px rgba(19, 21, 26, 0.26), 
+                            0px 10px 6px 0px rgba(19, 21, 26, 0.15), 
+                            0px 17px 7px 0px rgba(19, 21, 26, 0.04), 
+                            0px 26px 7px 0px rgba(19, 21, 26, 0.01);
+
+                        --color-purple: rgba(224, 204, 250, 1);
+                        color: rgba(191, 193, 201, 1);
+
+                        font-family: ui-sans-serif, system-ui, -apple-system, 
+                            BlinkMacSystemFont, "Segoe UI", Roboto, 
+                            "Helvetica Neue", Arial, "Noto Sans", 
+                            sans-serif, "Apple Color Emoji", "Segoe UI Emoji", 
+                            "Segoe UI Symbol", "Noto Color Emoji";
+                    }
+                </style>
+                
+                <div class="dropdown-content text-base-content rounded-t-box rounded-b-box top-px max-h-96 w-52">
+                    <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">
+                        <!-- All div below (within parent ^) is a theme option -->
+                        <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2 outline" data-set-theme="light" data-act-class="outline">
+                            <div data-theme="light" class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
+                                <div class="grid grid-cols-5 grid-rows-3">
+                                    <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4">
+                                        <div class="flex-grow text-sm font-bold">light</div> 
+                                        <div class="flex flex-shrink-0 flex-wrap gap-1">
+                                            <div class="bg-primary w-2 rounded"></div> 
+                                            <div class="bg-secondary w-2 rounded"></div>
+                                            <div class="bg-accent w-2 rounded"></div> 
+                                            <div class="bg-neutral w-2 rounded"></div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2 shadow-2xl" data-set-theme="dark" data-act-class="outline">
+                            <div data-theme="dark" class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
+                                <div class="grid grid-cols-5 grid-rows-3"> 
+                                    <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4">
+                                        <div class="flex-grow text-sm font-bold">dark</div> 
+                                        <div class="flex flex-shrink-0 flex-wrap gap-1"> 
+                                            <div class="bg-primary w-2 rounded"></div> 
+                                            <div class="bg-secondary w-2 rounded"></div> 
+                                            <div class="bg-accent w-2 rounded"></div> 
+                                            <div class="bg-neutral w-2 rounded"></div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2" data-set-theme="corporate" data-act-class="outline"> 
+                            <div data-theme="corporate" class="bg-base-100 text-base-content w-full cursor-pointer font-sans"> 
+                                <div class="grid grid-cols-5 grid-rows-3"> 
+                                    <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4"> 
+                                        <div class="flex-grow text-sm font-bold">corporate</div> 
+                                        <div class="flex flex-shrink-0 flex-wrap gap-1"> 
+                                            <div class="bg-primary w-2 rounded"></div> 
+                                            <div class="bg-secondary w-2 rounded"></div> 
+                                            <div class="bg-accent w-2 rounded"></div> 
+                                            <div class="bg-neutral w-2 rounded"></div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div>
+                        <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2" data-set-theme="coffee" data-act-class="outline"> 
+                            <div data-theme="coffee" class="bg-base-100 text-base-content w-full cursor-pointer font-sans"> 
+                                <div class="grid grid-cols-5 grid-rows-3"> 
+                                    <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4"> 
+                                        <div class="flex-grow text-sm font-bold">coffee</div> 
+                                        <div class="flex flex-shrink-0 flex-wrap gap-1"> 
+                                            <div class="bg-primary w-2 rounded"></div> 
+                                            <div class="bg-secondary w-2 rounded"></div> 
+                                            <div class="bg-accent w-2 rounded"></div> 
+                                            <div class="bg-neutral w-2 rounded"></div> 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+                
+                `;
+        }
+    }
+
     
     customElements.define("jordans-themes", ThemeSelector, {extends: 'button'});
+    customElements.define("jordans-themes-canvas", ThemeSelectorCanvas);
     //console.log(document.querySelector("jordans-themes"));
 </script>
-
-<!--
-     Dropdown box 
-    <div class="dropdown-content bg-base-200 text-base-content rounded-t-box rounded-b-box top-px max-h-96 w-52 overflow-y-auto shadow-2xl mt-16">
-        <div class="grid grid-cols-1 gap-3 p-3" tabindex="0">
-             All div below (within parent ^) is a theme option 
-            <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2 outline" data-set-theme="light" data-act-class="outline">
-                <div data-theme="light" class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
-                    <div class="grid grid-cols-5 grid-rows-3">
-                        <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4">
-                            <div class="flex-grow text-sm font-bold">light</div> 
-                            <div class="flex flex-shrink-0 flex-wrap gap-1">
-                                <div class="bg-primary w-2 rounded"></div> 
-                                <div class="bg-secondary w-2 rounded"></div>
-                                <div class="bg-accent w-2 rounded"></div> 
-                                <div class="bg-neutral w-2 rounded"></div> 
-                            </div> 
-                        </div> 
-                    </div> 
-                </div> 
-            </div>
-            <div class="outline-base-content overflow-hidden rounded-lg outline-2 outline-offset-2" data-set-theme="dark" data-act-class="outline">
-                <div data-theme="dark" class="bg-base-100 text-base-content w-full cursor-pointer font-sans">
-                    <div class="grid grid-cols-5 grid-rows-3"> 
-                        <div class="col-span-5 row-span-3 row-start-1 flex gap-1 py-3 px-4">
-                            <div class="flex-grow text-sm font-bold">dark</div> 
-                            <div class="flex flex-shrink-0 flex-wrap gap-1"> 
-                                <div class="bg-primary w-2 rounded"></div> 
-                                <div class="bg-secondary w-2 rounded"></div> 
-                                <div class="bg-accent w-2 rounded"></div> 
-                                <div class="bg-neutral w-2 rounded"></div> 
-                            </div> 
-                        </div> 
-                    </div> 
-                </div> 
-            </div>
-        </div>
-    </div>
--->

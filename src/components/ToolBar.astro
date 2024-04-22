@@ -11,6 +11,8 @@ import ThemeSelector from "../components/ThemeSelector.astro";
 </jordans-toolbar>
 
 <script>
+import ThemeSelector from "./ThemeSelector.astro";
+
     const WS_EVENT_NAME = "jordans-toolbar";
     const HOVER_DELAY = 2 * 1e3;
     const TOOLBAR_HITBOX_BELOW = 42;
@@ -19,8 +21,9 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         //shadowRoot;
         delayedHideTimeout;
         toolbarContainer;
-        apps = [];
+        apps : string[][] = [];
         hasBeenInitialized = false;
+        appsToShow = 1;
 
         // TODO: This should be dynamic based on the screen size or at least configurable
         constructor() {
@@ -31,10 +34,18 @@ import ThemeSelector from "../components/ThemeSelector.astro";
 
         connectedCallback() {
             console.log("Custom element added to page.");
+            this.prep_Apps();
         }
 
         disconnectedCallback() {
             console.log("Custom element removed from page.");
+        }
+
+        prep_Apps() {
+            this.apps = [
+                ["home",""],
+                ["theme-selector","theme-selector-canvas"]
+            ];
         }
 
         tb_init() {
@@ -266,7 +277,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                             <div></div>
 
                             <div class="separator"></div>
-                            <button is="jordans-themes" class="item" data-app-id="theme-selector"></button>
+                            <button is="jordans-themes" id="jordans-themes-btn" class="item dropdown-end" data-app-id="theme-selector"></button>
                         </div>
                     </div>
                     
@@ -277,10 +288,9 @@ import ThemeSelector from "../components/ThemeSelector.astro";
             this.toolbarContainer = this.querySelector("#toolbar-root"); //focus the toolbar root
             this.attachEvents(); //attach mouseenter & mouseleave events for animations
             
-            // Creates the tooltip canvas for each app within toolbar
             /*
+            // Creates the tooltip canvas for each app within toolbar
             this.apps.forEach(async (app) => {
-                //settings.logger.verboseLog(`Creating app canvas for ${app.id}`);
                 const appCanvas = document.createElement("jordans-toolbar-app-canvas");
                 appCanvas.dataset.appId = app.id;
                 this.append(appCanvas);
@@ -301,22 +311,59 @@ import ThemeSelector from "../components/ThemeSelector.astro";
             */
         }
 
-        /* To go within #bar-container
-                ${this.apps.filter((app) => app.builtIn && !["astro:settings", "astro:more"].includes(app.id)).map((app) => this.getAppTemplate(app)).join("")}
-                                ${this.apps.filter((app) => !app.builtIn).length > 0 ? `<div class="separator"></div>${this.apps.filter((app) => !app.builtIn).slice(0, this.customAppsToShow).map((app) => this.getAppTemplate(app)).join("")}` : ""}
-                                ${this.apps.filter((app) => !app.builtIn).length > this.customAppsToShow ? this.getAppTemplate(
-                                    this.apps.find((app) => app.builtIn && app.id === "astro:more")
-                                    ) : ""}
+        /*
 
-        getActiveApp() {
-            var res = this.apps.find((app) => app.active)
-            //console.log("checking activity -> " + res);
-            return res;
-        }
         */
+        getActiveApp() {
+            //var res = this.apps.find((app) => app.active)
+            const items = this.querySelectorAll(".item");
+            
+            var res = items.forEach((item) => {
+                    if (item.getAttribute("active"))
+                        return true;
+                });
+            console.log("checking activity -> " + res);
+            return res != undefined;
+        }
+
+        getAppById(id) {
+            return this.apps.find((app) => app.id === id);
+        }
+        
+        getAppCanvasById(id) {
+            return this.querySelector(
+                `jordans-themes-canvas[data-app-id="${id}"]`
+            );
+        }
         
         // Attach events to toolbar for animations
         attachEvents() {
+            const items = this.querySelectorAll(".item");
+            items.forEach((item) => {
+                item.addEventListener("click", async (event) => {
+                    const target = event.currentTarget;
+                    console.log(target);
+                    if (!target || !(target instanceof HTMLElement))
+                        return;
+
+                    const id = target.dataset.appId;
+                    console.log(id);
+                    if (!id)
+                        return;
+
+                    if (id == "theme-selector")
+                        console.log(id);
+                        this.toggleApp(item, true);
+
+                    const app = this.getAppById(id);
+                    console.log(app);
+                    if (!app)
+                        return;
+
+                    event.stopPropagation();
+                    //await this.toggleAppStatus(app);
+                });
+            });
 
             // When the mouse enters the div box of #toolbar-root
             ["mouseenter", "focusin"].forEach((event) => {
@@ -336,12 +383,22 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                     // if any of the apps are active or the toolbar is already hidden, ignore
                     if (this.isHidden()) {
                         //console.log("still active...");
-                        //return;
+                        return;
                     }
                     //console.log("leaving");
                     this.triggerDelayedHide(); //otherwise hide toolbar
                 });
             });
+
+            /*
+            var toolbar = this.querySelector("#toolbar-root");
+            document.addEventListener("mousedown", (event) => {
+                if (toolbar.contains(event.target)) {
+                    console.log("Clicked Inside");
+                } else {
+                    console.log("Clicked Outside / Elsewhere");
+                }
+            });*/
             
             // Add event listener to keyboard input 
             document.addEventListener("keyup", (event) => {
@@ -349,9 +406,9 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                     return;
                 if (this.isHidden())
                     return;
-                const activeApp = undefined; //this.getActiveApp();
-                if (activeApp == undefined) {
-                    //this.toggleAppStatus(activeApp);
+                const activeApp = this.getActiveApp();
+                if (activeApp) {
+                    return; //if any app is active, do nothing
                 } else { // -> if user presses escape key, it'll exit the toolbar
                     this.setToolbarVisible(false);
                 }
@@ -360,7 +417,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
 
         isHidden() {
             var res = this.toolbarContainer?.hasAttribute("data-hidden") ?? true
-            //console.log("checking hidden -> " + res);
+            console.log("checking hidden -> " + res);
             return res;
         }
 
@@ -375,6 +432,17 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                 this.setToolbarVisible(false);
                 this.delayedHideTimeout = void 0;
             }, HOVER_DELAY);
+        }
+        
+        toggleApp(item, status){
+
+            if (status) {
+                canvas.style.display = "block";
+                item.setAttribute("active","");
+            } else {
+                canvas.style.display = "none";
+                item.removeAttribute("active");
+            }
         }
         
         setToolbarVisible(newStatus) {
@@ -397,13 +465,18 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                 toolBar?.setAttribute("tabindex", "0");
                 if (toolBarHitboxBelow)
                     toolBarHitboxBelow.style.height = `${TOOLBAR_HITBOX_BELOW}px`;
+                
+                const items = this.querySelectorAll(".item");
+                items.forEach((item) => {
+                    if (item.getAttribute("active"))
+                        this.toggleApp(item, false);
+                });
                 return;
             }
         }
     }
     
-//let customElementRegistry = window.customElements;
     customElements.define("jordans-toolbar", JordansToolbar);
-    //console.log(document.querySelector("jordans-themes"));
-    //console.log(ThemeSelector);
+    //var themeObj = document.querySelector("jordans-toolbar");
+    //console.log(themeObj.apps);
 </script>
