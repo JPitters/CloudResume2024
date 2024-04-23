@@ -32,19 +32,13 @@
 
         initThemeSelection () {
             console.log("init theme selection");
-            var container = document.body; //getElementById("jordans-themes-btn");
+            var container = document.getElementById("toolbar-root");
             container?.append(document.createElement("jordans-themes-canvas"));
 
             document.querySelector("jordans-themes-canvas")?.setAttribute("id", "theme-selector-canvas");
             var themes = document.getElementById("theme-selector-canvas")
             themes.className = "bg-neutral";
             themes.style.display = "none"; 
-        }
-
-        dropDownSelection () {
-            //this.innerHTML.concat(`<jordans-themes-canvas></jordans-themes-canvas>`);
-            var themes = document.getElementById("theme-selector-canvas");
-            themes.style.display = "block";
         }
     }
 
