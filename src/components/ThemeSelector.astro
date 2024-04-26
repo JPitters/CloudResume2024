@@ -4,6 +4,9 @@
 
 
 <script>
+    let mainContainer = "tool-bar";
+    let canvasName = "jordans-themes-canvas";
+    let canvasId = "theme-selector-canvas";
 
     class ThemeSelector extends HTMLButtonElement {
 
@@ -32,11 +35,11 @@
 
         initThemeSelection () {
             console.log("init theme selection");
-            var container = document.getElementById("toolbar-root");
-            container?.append(document.createElement("jordans-themes-canvas"));
+            var container = document.getElementById(mainContainer);
+            container?.append(document.createElement(canvasName));
 
-            document.querySelector("jordans-themes-canvas")?.setAttribute("id", "theme-selector-canvas");
-            var themes = document.getElementById("theme-selector-canvas")
+            document.querySelector(canvasName)?.setAttribute("id", canvasId);
+            var themes = document.getElementById(canvasId)
             themes.className = "bg-neutral";
             themes.style.display = "none"; 
         }
@@ -48,6 +51,7 @@
             super();
             //this.shadowRoot = this.attachShadow({ mode: "open" });
         }
+
         connectedCallback() {
             console.log("Theme Selector Canvas added to page.");
 
@@ -58,7 +62,7 @@
                         display: none;
                     }
 
-                    #theme-selector-canvas {
+                    #${canvasId} {
                         max-height: 180px;
                         /*width: min(320px, 100%);*/
 
@@ -166,10 +170,37 @@
                 
                 `;
         }
+
+        setTheme(doc) {
+          const theme_selectors = doc.querySelectorAll("#"+canvasId + " div[data-theme]");
+          const theme = window.localStorage.getItem("data-theme");
+      
+          if (theme) {
+            this.updateTheme(doc, theme);
+          } else {
+            this.updateTheme(doc, "dark");
+          }
+        }
+      
+        updateTheme(doc, newTheme) {
+          doc.querySelector("html").setAttribute("data-theme", newTheme);
+          window.localStorage.setItem("data-theme", newTheme);
+        }
+      
+        changeThemeBehavior(doc) {
+          const theme_selectors = doc.querySelectorAll("#"+canvasId + " div[data-theme]");
+          theme_selectors.forEach((selector) => {
+            selector.addEventListener("click", () => {
+                this.updateTheme(doc, selector.getAttribute("data-theme"));
+            });
+          });
+        }
+        
+        //document.addEventListener("astro:after-swap", () => changeThemeBehavior(document));
     }
 
     
     customElements.define("jordans-themes", ThemeSelector, {extends: 'button'});
-    customElements.define("jordans-themes-canvas", ThemeSelectorCanvas);
+    customElements.define(canvasName, ThemeSelectorCanvas);
     //console.log(document.querySelector("jordans-themes"));
 </script>

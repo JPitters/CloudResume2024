@@ -25,17 +25,18 @@ import ThemeSelector from "./ThemeSelector.astro";
         apps : string[][] = [];
         hasBeenInitialized = false;
         appsToShow = 1;
+        toggleClickCheck;
 
-        // TODO: This should be dynamic based on the screen size or at least configurable
         constructor() {
             super();
-            //this.shadowRoot = this.attachShadow({ mode: "open" });
+            // Anything else to initialize should go in connectedCallBack
         }
 
         connectedCallback() {
             console.log("Custom element added to page.");
             this.prep_Apps();
             this.tb_init();
+            this.toggleClickCheck = undefined;
         }
 
         disconnectedCallback() {
@@ -292,19 +293,20 @@ import ThemeSelector from "./ThemeSelector.astro";
         /*
 
         */
+
+        // A method to determine if any apps are active and return the active app or undefined
         getActiveApp() {
-            //var res = this.apps.find((app) => app.active)
             const items = this.querySelectorAll(".item");
-            var res = undefined;
-            items.forEach((item) => {
-                //console.log(item);
+            var res = undefined; // set result default to undefined
+
+            items.forEach((item) => { // attempt to find an active app
                 if (item.getAttribute("active") != null) {
-                    res = true;
+                    res = item; // found an active app
                 }
             });
 
-            console.log("Toolbar app activity -> " + res);
-            return res != undefined;
+            //console.log("Toolbar app activity -> " + res);
+            return res; // return the results 
         }
 
         getAppById(id) {
@@ -319,7 +321,8 @@ import ThemeSelector from "./ThemeSelector.astro";
         
         // Attach events to toolbar for animations
         attachEvents() {
-            const items = this.querySelectorAll(".item");
+            var parent = this; //this instance of JordansToolBar
+            const items = parent.querySelectorAll(".item");
             items.forEach((item) => {
                 item.addEventListener("click", async (event) => {
                     const target = event.currentTarget;
@@ -328,7 +331,7 @@ import ThemeSelector from "./ThemeSelector.astro";
                         return;
 
                     const id = target.dataset.appId;
-                    console.log(id);
+                    //console.log(id);
                     if (!id)
                         return;
 
@@ -341,17 +344,16 @@ import ThemeSelector from "./ThemeSelector.astro";
                         //return;
 
                     event.stopPropagation();
-                    this.toggleApp(item);
-                    //await this.toggleAppStatus(app);
+                    parent.toggleApp(item);
                 });
             });
 
             // When the mouse enters the div box of #toolbar-root
             ["mouseenter", "focusin"].forEach((event) => {
-                this.toolbarContainer.addEventListener(event, () => {
-                    this.clearDelayedHide();
-                    if (this.isHidden()) {
-                        this.setToolbarVisible(true);
+                parent.toolbarContainer.addEventListener(event, () => {
+                    parent.clearDelayedHide();
+                    if (parent.isHidden()) {
+                        parent.setToolbarVisible(true);
                     }
                 });
             });
@@ -359,40 +361,28 @@ import ThemeSelector from "./ThemeSelector.astro";
             // When the mouse leaves the div box of #toolbar-root
             ["mouseleave", "focusout"].forEach((event) => {
 
-                this.toolbarContainer.addEventListener(event, () => {
-                    this.clearDelayedHide(); //prep for hide
+                parent.toolbarContainer.addEventListener(event, () => {
+                    parent.clearDelayedHide(); //prep for hide
                     // if any of the apps are active or the toolbar is already hidden, ignore
-                    if (this.getActiveApp()) {
+                    if (parent.getActiveApp() != undefined) {
                         //console.log("still active...");
                         return;
                     }
-                    this.triggerDelayedHide(); //otherwise hide toolbar
+                    parent.triggerDelayedHide(); //otherwise hide toolbar
                 });
             });
-
-            /*
-            var toolbar = this.querySelector("#toolbar-root");
-            document.addEventListener("mousedown", (event) => {
-                if (toolbar.contains(event.target)) {
-                    console.log("Clicked Inside");
-                } else {
-                    console.log("Clicked Outside / Elsewhere");
-                }
-            });*/
             
             // Add event listener to keyboard input 
             document.addEventListener("keyup", (event) => {
                 if (event.key !== "Escape")
                     return;
-                if (this.isHidden())
+                if (parent.isHidden())
                     return;
-                const activeApp = this.getActiveApp();
-                if (activeApp) {
-                    return; //if any app is active, do nothing
-                } else { // -> if user presses escape key, it'll exit the toolbar
-                    //this.toggleApp(false);
-                    this.setToolbarVisible(false);
+                const activeApp = parent.getActiveApp();
+                if (activeApp != undefined) {
+                    parent.toggleApp(activeApp);
                 }
+                parent.setToolbarVisible(false);
             });
         }
 
@@ -417,9 +407,11 @@ import ThemeSelector from "./ThemeSelector.astro";
         
         // A method for toggling the canvas of a specific toolbar item
         toggleApp(item){
+            console.log("Toggle item on/ off");
             const status = item.getAttribute("active") == null; //find out if the item is not active
             var canvasName = undefined; // a variable to hold the id/ name of the canvas
             var canvas = null; // a variable to hold the canvas container
+            const parent = this;
 
             // compare the current item's id with the roster of registered apps 
             this.apps.some(app => {
@@ -436,16 +428,41 @@ import ThemeSelector from "./ThemeSelector.astro";
             } else {
                 // The desired canvas object is already registered into the DOM, so we just need to call it...
                 canvas = document.getElementById(canvasName);
+                if (canvas == null) {
+                    console.log("...couldn't find ->> " + canvasName);
+                    return;
+                }
             }
+                    
+            /* From here onwards we toggle each event... */
+            const toolbar = parent.querySelector("#toolbar-root");
+            if (parent.toggleClickCheck == undefined) {
+                parent.toggleClickCheck = function checkClickLocation(event) {
+                    if (toolbar.contains(event.target)) {
+                        //console.log("Clicked Inside - Do nothing");
+                        return;
 
+                    } else {
+                        console.log("Clicked Outside / Elsewhere - exit");
+                        document.removeEventListener("mousedown", parent.toggleClickCheck);
+                        parent.toggleApp(item);
+                        parent.setToolbarVisible(false);
+                    }
+                };
+            }
 
             if (status) {
                 // the item previously wasn't active, so here we enable it...
                 canvas.style.display = "block";
                 item.setAttribute("active","");
+                document.addEventListener("mousedown", parent.toggleClickCheck);
+                return;
+
             } else { // disable the item & canvas
                 canvas.style.display = "none";
                 item.removeAttribute("active");
+                document.removeEventListener("mousedown", parent.toggleClickCheck); // for redundancy
+                parent.toggleClickCheck = undefined; // to overwrite functionality -- TODO: confirm no mem leak from this
                 console.log("Active app closed...");
             }
         }
@@ -471,15 +488,6 @@ import ThemeSelector from "./ThemeSelector.astro";
                 if (toolBarHitboxBelow) {
                     toolBarHitboxBelow.style.height = `${TOOLBAR_HITBOX_BELOW}px`;
                 }
-                
-                const items = this.querySelectorAll(".item");
-                for (const item of items){ 
-                    if (item.getAttribute("active")){
-                        console.log("Found active app, attempting to toggle...");
-                        this.toggleApp(item);
-                        break;
-                    }
-                }  
                 
                 return;
             }
