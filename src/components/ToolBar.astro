@@ -1,9 +1,5 @@
 ---
-//import { createHotContext as __vite__createHotContext } from "/@vite/client";
-//import.meta.hot = __vite__createHotContext("/node_modules/astro/dist/runtime/client/dev-toolbar/toolbar.js?v=736de75c");
-import { getIconElement, isDefinedIcon } from "/node_modules/astro/dist/runtime/client/dev-toolbar/ui-library/icons.js?v=736de75c";
 import ThemeSelector from "../components/ThemeSelector.astro";
-
 ---
 
 <jordans-toolbar>
@@ -11,21 +7,20 @@ import ThemeSelector from "../components/ThemeSelector.astro";
 </jordans-toolbar>
 
 <script>
-import type { Code } from "astro:components";
-import ThemeSelector from "./ThemeSelector.astro";
 
     const WS_EVENT_NAME = "jordans-toolbar";
     const HOVER_DELAY = 2 * 1e3;
     const TOOLBAR_HITBOX_BELOW = 42;
 
     class JordansToolbar extends HTMLElement {
-        //shadowRoot;
+        
         delayedHideTimeout;
         toolbarContainer;
+        toggleClickCheck;
+
         apps : string[][] = [];
         hasBeenInitialized = false;
         appsToShow = 1;
-        toggleClickCheck;
 
         constructor() {
             super();
@@ -249,7 +244,7 @@ import ThemeSelector from "./ThemeSelector.astro";
                     }
 
                     #tool-bar .separator {
-                        background: rgba(52, 56, 65, 1);
+                        /*background: rgba(52, 56, 65, 1);*/
                         width: 1px;
                     }
 
@@ -274,11 +269,11 @@ import ThemeSelector from "./ThemeSelector.astro";
                                 </div>
                                 <span class="item-tooltip">Menu</span>
                             </button>
-                            <div class="separator"></div>
+                            <div class="bg-secondary separator"></div>
 
                             <div></div>
 
-                            <div class="separator"></div>
+                            <div class="bg-secondary separator"></div>
                             <button is="jordans-themes" id="jordans-themes-btn" class="item dropdown-end" data-app-id="${this.apps.at(1)?.at(0)}"></button>
                         </div>
                     </div>
@@ -287,12 +282,8 @@ import ThemeSelector from "./ThemeSelector.astro";
                 </div>`;
             
             this.toolbarContainer = this.querySelector("#toolbar-root"); //focus the toolbar root
-            this.attachEvents(); //attach mouseenter & mouseleave events for animations
+            this.attachEvents(); //attach various events for fluidity
         }
-
-        /*
-
-        */
 
         // A method to determine if any apps are active and return the active app or undefined
         getActiveApp() {
@@ -305,18 +296,7 @@ import ThemeSelector from "./ThemeSelector.astro";
                 }
             });
 
-            //console.log("Toolbar app activity -> " + res);
             return res; // return the results 
-        }
-
-        getAppById(id) {
-            return this.apps.find((app) => app.id === id);
-        }
-        
-        getAppCanvasById(id) {
-            return this.querySelector(
-                `jordans-themes-canvas[data-app-id="${id}"]`
-            );
         }
         
         // Attach events to toolbar for animations
@@ -326,22 +306,12 @@ import ThemeSelector from "./ThemeSelector.astro";
             items.forEach((item) => {
                 item.addEventListener("click", async (event) => {
                     const target = event.currentTarget;
-                    //console.log(target);
                     if (!target || !(target instanceof HTMLElement))
                         return;
 
                     const id = target.dataset.appId;
-                    //console.log(id);
                     if (!id)
                         return;
-
-                    //if (id == "theme-selector")
-                        //console.log(id);
-
-                    //const app = this.getAppById(id);
-                    //console.log(app);
-                    //if (!app)
-                        //return;
 
                     event.stopPropagation();
                     parent.toggleApp(item);
@@ -363,11 +333,13 @@ import ThemeSelector from "./ThemeSelector.astro";
 
                 parent.toolbarContainer.addEventListener(event, () => {
                     parent.clearDelayedHide(); //prep for hide
+
                     // if any of the apps are active or the toolbar is already hidden, ignore
                     if (parent.getActiveApp() != undefined) {
                         //console.log("still active...");
                         return;
                     }
+
                     parent.triggerDelayedHide(); //otherwise hide toolbar
                 });
             });
@@ -422,8 +394,7 @@ import ThemeSelector from "./ThemeSelector.astro";
             });
 
             if (canvasName == undefined || canvasName == "") {
-                console.log("failed to map a registered item...");
-                console.log(canvasName);
+                console.log("failed to map to a registered item...");
                 return;
             } else {
                 // The desired canvas object is already registered into the DOM, so we just need to call it...
@@ -443,7 +414,7 @@ import ThemeSelector from "./ThemeSelector.astro";
                         return;
 
                     } else {
-                        console.log("Clicked Outside / Elsewhere - exit");
+                        //console.log("Clicked Outside / Elsewhere - exit");
                         document.removeEventListener("mousedown", parent.toggleClickCheck);
                         parent.toggleApp(item);
                         parent.setToolbarVisible(false);
