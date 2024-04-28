@@ -1,5 +1,5 @@
 ---
-title: "Demo Post 2"
+title: "Blog Post 2"
 description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 pubDate: "April 20 2024"
 heroImage: "/post_img.webp"
