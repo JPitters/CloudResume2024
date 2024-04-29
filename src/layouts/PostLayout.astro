@@ -6,16 +6,29 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 export interface Props extends BlogSchema {}
 
-const { title, description, pubDate, updatedDate, heroImage, badge, tags = [] } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, imageType, imageHeight, imageWidth, badge, tags = [] } = Astro.props;
 dayjs.extend(localizedFormat);
 const displayDate = dayjs(pubDate).format("ll")
 import { Image } from "astro:assets";
+
+var defaultH = imageHeight == undefined ? 450 : imageHeight;
+var defaultW = imageWidth == undefined ? 350 : imageWidth;
+
+var defaultClasses = " prose prose-lg max-w-[750px] prose-img:mx-auto"
+defaultClasses = imageType == undefined ? defaultClasses : imageType + defaultClasses;
+
 ---
 
 <BaseLayout title={title} description={description} image={heroImage}, ogType="article">
   <main class="md:flex md:justify-center">
-    <article class="prose prose-lg max-w-[750px] prose-img:mx-auto">
-      {heroImage && <Image width={750} height={422} src={heroImage} alt={title} class="w-full mb-6" />}
+    <article class={defaultClasses}>
+
+      {
+        heroImage && imageType && <Image width={defaultW} height={defaultH} src={heroImage} alt={title} data-image="gif" class=" mb-6" />
+        ||
+        heroImage && <Image width={defaultW} height={defaultH} src={heroImage} alt={title} class=" mb-6" />
+      }
+
       <h1 class="title my-2 text-4xl font-bold">{title}</h1>
       {pubDate && <time>{displayDate}</time>}
       <br />
@@ -41,3 +54,7 @@ import { Image } from "astro:assets";
     </article>
   </main>
 </BaseLayout>
+    <script>
+      import { enableGifs } from "src/lib/animateGif";
+      enableGifs();
+    </script>

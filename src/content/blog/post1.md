@@ -4,55 +4,48 @@ itemId: "blog firstPost"
 description: "The main aspects of the web site has been put together, this calls for a celebration!"
 pubDate: "April 28 2024"
 heroImage: "/lets_dance.png"
-imageType: "gif"
-tags: ["tokio"]
+imageType: "postGif"
+imageHeight: 400
+imageWidth: 200
+tags: ["FRESH"]
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer
-malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas
-pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse
-platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada
-fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea
-dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst
-quisque sagittis purus sit amet.
+Hello readers!!! For some time now, I have felt that I would like to make myself a blog, or portfolio, 
+and use it present some of my more... inspirational ideas. Alas, I struggled to muster up the passion 
+to start the project. One thing that helped me hold interest in this personal project is the main goal: 
+experience! At the very least, the experience it adds is valuable, as 'in all labor, there is profit~' 
+(or however you say it...).
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum
-quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet.
-Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus.
-Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit
-ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt
-dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus
-arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed
-tempus urna et pharetra pharetra massa massa ultricies mi.
+I'm not exactly a blogger, more of a philosophical thinker, still I'll give this a good effort and see 
+how it goes... but as they say in someone's motherland, "give everything a good effort; you can always 
+try, and if you don't succeed the first time... skydiving is not for you." Luckily, I'm becoming more of 
+a cloud enthusiast than a skydiver. Hence the "Solutions Architect" title on the Home page... unless I 
+changed it by the time you're reading this. Regardless, let's talk goals: Life & Solutions Architecture.
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam
-sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec.
-Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna
-fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et
-egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel
-turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra
-nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim
-praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus
-egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam
-ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor
-purus non. Amet dictum sit amet justo donec enim.
+For a while, I floated in the Software Development field, mostly working on webapps and such, forever waiting 
+on something that would just hit me over the head and wake me up. And then life happened. I got a girlfriend, 
+I travelled a lot, hung out with my brothers, AI popped up out the darkness and shook the coins out of me - 
+it was mostly great! However, I also came to understand what I am most passionate about. I look forward to 
+a life of successfully supporting others and providing my loved ones with great experiences, while working
+on things that actually interest me. So, I started to research tech solutions. A lot. Eventually, I came upon 
+the "new" multi-cloud standard of Cloud Architecture, and it intrigued me... aaaand it pays fairly well. Even
+then, the Multi-Cloud Architect "wall" seemed fairly steep (I guess they don't call 'em Cloud Architects for 
+nothing, *badum tss*). Holding this ember of new-found passion, I actually feel eager to scale the 
+aforementioned wall, so... I'm doing my best to give it a good effort. 
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut
-consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra.
-Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor
-dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor
-dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque
-eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices
-tincidunt arcu. Id cursus metus aliquam eleifend mi.
+Now, why should I care about multi-cloud skills? Well, picture this: you're in a hypothetical tech dystopia 
+where all the cool kids are talking about AWS, Azure, and Google Cloud like they're Pokémon. You don't want to 
+be the one stuck with just a Squirtle when the world (your Enterprise Apps) also needs a Charizard, right? 
+Embracing multi-cloud isn't just about keeping up with trends; it's about future-proofing my skills.
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus
-imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu
-cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt
-dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat
-sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida.
-Egestas integer eget aliquet nibh praesent tristique magna.
+So, how can this humble blog/portfolio project help me? Let's break it down:
+
+-> Research and Planning: Just like building a blog, navigating multi-cloud environments requires meticulous planning. I'll spend some time researching different cloud providers, their services, pricing models, and best practices. I could start with a roadmap for each option, but I think each Cloud Service Provider(CSP) isn't too different. My main learning goal is to understand the underlying tech: why they do what they do, what is it meant for, how they do it, etc.. 
+
+-> Hands-on Practice: As my Prof. would say: "Theory is great, but nothing beats getting your hands dirty." I plan to experiment with different CSPs and use the efforts of developing this website to practice! Although, I am currently leaning towards hosting with AWS. 
+
+-> Networking and Community Engagement: I have already joined a few online communities, and met some great people during meet-ups in various locations! For example, I flew from Toronto to Atlanta in March for an engineering event, which I'll get more into in a different post. 
+
+-> Continuous Learning: This is one of the hardest parts for me - the world of cloud computing is constantly evolving, so I'll need to stay on my toes. Keeping up with the latest trends, updates, and certifications, is good for anyone in the IT field, but I tend to get very drawn into projects and ignore the tech I don't use. I tend to view it as a quest for knowledge – like trying to collect all the Infinity Stones, but I didn't bother with the other ones because the green one is my favorite.
+
+So there you have it – I have a vision, passion, and a hunger for growth. Now, if you'll excuse me, I must carry on with my studies. Thanks for reading!

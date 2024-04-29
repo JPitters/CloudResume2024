@@ -31,6 +31,9 @@ const { page } = Astro.props;
             <HorizontalCard
               title={post.data.title}
               img={post.data.heroImage}
+              imgType={post.data.imageType}
+              imgH={post.data.imageHeight}
+              imgW={post.data.imageWidth}
               desc={post.data.description}
               url={"/blog/" + createSlug(post.data.title, post.slug)}
               target="_self"
@@ -84,4 +87,9 @@ const { page } = Astro.props;
       )
     }
   </div>
+  
+  <script>
+    import { enableGifs } from "src/lib/animateGif";
+    enableGifs();
+  </script>
 </BaseLayout>

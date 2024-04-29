@@ -16,7 +16,7 @@ const last_posts = posts.slice(0, 3);
     <div class="text-3xl py-3 font-bold">Software Engineer, Solutions Architect, Entrepreneur</div>
     <div class="py-2">
       <text class="text-lg">
-        This is a simple Portfolio built with <b>Astro</b> and <b>TailwindCSS</b>.
+        This is a simple web Blog/ Portfolio built with <b>Astro</b> and <b>TailwindCSS</b>.
       </text>
     </div>
     <div class="mt-8">
@@ -70,6 +70,8 @@ const last_posts = posts.slice(0, 3);
           target="_self"
           badge={post.data.badge}
           imgType={post.data.imageType}
+          imgH={post.data.imageHeight}
+          imgW={post.data.imageWidth}
         >
         </HorizontalCard>
         <div class="divider my-0" />
@@ -79,28 +81,7 @@ const last_posts = posts.slice(0, 3);
   }
 
   <script>
-    var postContainers = document.getElementsByClassName("gif");
-    //console.log(postContainers);
-
-    for (const container of postContainers) {
-      const imgObj = container.getElementsByTagName("img")[0];
-      var imageType = imgObj.dataset.image;
-
-      if (imageType != undefined) {
-
-        container.addEventListener("mouseenter", () => {
-          let oldSrc = imgObj.getAttribute("src");
-          const newSrc = oldSrc?.slice(0, oldSrc.length - 3);
-          imgObj.setAttribute("src", newSrc + "gif");
-        });
-
-        container.addEventListener("mouseleave", () => {
-          let oldSrc = imgObj.getAttribute("src");
-          const newSrc = oldSrc?.slice(0, oldSrc.length - 3);
-          imgObj.setAttribute("src", newSrc + "png");
-        });
-      }
-    }
-
+    import { enableGifs } from "src/lib/animateGif";
+    enableGifs();
   </script>
 </BaseLayout>
