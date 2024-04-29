@@ -63,14 +63,44 @@ const last_posts = posts.slice(0, 3);
       <>
         <HorizontalCard
           title={post.data.title}
+          id={post.data.itemId}
           img={post.data.heroImage}
           desc={post.data.description}
           url={"/blog/" + createSlug(post.data.title, post.slug)}
           target="_self"
           badge={post.data.badge}
-        />
+          imgType={post.data.imageType}
+        >
+        </HorizontalCard>
         <div class="divider my-0" />
       </>
     ))
+
   }
+
+  <script>
+    var postContainers = document.getElementsByClassName("gif");
+    //console.log(postContainers);
+
+    for (const container of postContainers) {
+      const imgObj = container.getElementsByTagName("img")[0];
+      var imageType = imgObj.dataset.image;
+
+      if (imageType != undefined) {
+
+        container.addEventListener("mouseenter", () => {
+          let oldSrc = imgObj.getAttribute("src");
+          const newSrc = oldSrc?.slice(0, oldSrc.length - 3);
+          imgObj.setAttribute("src", newSrc + "gif");
+        });
+
+        container.addEventListener("mouseleave", () => {
+          let oldSrc = imgObj.getAttribute("src");
+          const newSrc = oldSrc?.slice(0, oldSrc.length - 3);
+          imgObj.setAttribute("src", newSrc + "png");
+        });
+      }
+    }
+
+  </script>
 </BaseLayout>

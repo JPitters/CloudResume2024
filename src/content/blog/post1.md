@@ -1,8 +1,10 @@
 ---
-title: "Blog 1"
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-pubDate: "April 20 2024"
-heroImage: "/post_img.webp"
+title: "Website Finished!"
+itemId: "blog firstPost"
+description: "The main aspects of the web site has been put together, this calls for a celebration!"
+pubDate: "April 28 2024"
+heroImage: "/lets_dance.png"
+imageType: "gif"
 tags: ["tokio"]
 ---
 
