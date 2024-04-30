@@ -5,9 +5,9 @@ const tag_url = url.split("/").slice(0, -1).join("/") + "/tag";
 
 
 var postClasses = " rounded-lg bg-base-100 hover:shadow-xl transition ease-in-out hover:scale-[102%]"
+postClasses = id == undefined ? postClasses : postClasses + id;
 
 var postType : string = imgType == undefined ? postClasses : imgType + postClasses;
-//console.log(imgType);
 
 ---
 
