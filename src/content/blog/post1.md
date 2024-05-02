@@ -11,7 +11,7 @@ tags: ["FRESH"]
 ---
 
 Hello readers!!! For some time now, I have felt that I would like to make myself a blog, or portfolio, 
-and use it present some of my more... inspirational ideas. Alas, I struggled to muster up the passion 
+and use it to present some of my more... inspirational ideas. Alas, I struggled to muster up the passion 
 to start the project. One thing that helped me hold interest in this personal project is the main goal: 
 experience! At the very least, the experience it adds is valuable, as 'in all labor, there is profit~' 
 (or however you say it...).
@@ -24,7 +24,7 @@ changed it by the time you're reading this. Regardless, let's talk goals: Life &
 
 For a while, I floated in the Software Development field, mostly working on webapps and such, forever waiting 
 on something that would just hit me over the head and wake me up. And then life happened. I got a girlfriend, 
-I travelled a lot, hung out with my brothers, AI popped up out the darkness and shook the coins out of me - 
+I traveled a lot, hung out with my brothers, AI popped up out the darkness and shook the coins out of me - 
 it was mostly great! However, I also came to understand what I am most passionate about. I look forward to 
 a life of successfully supporting others and providing my loved ones with great experiences, while working
 on things that actually interest me. So, I started to research tech solutions. A lot. Eventually, I came upon 
@@ -49,3 +49,5 @@ So, how can this humble blog/portfolio project help me? Let's break it down:
 -> Continuous Learning: This is one of the hardest parts for me - the world of cloud computing is constantly evolving, so I'll need to stay on my toes. Keeping up with the latest trends, updates, and certifications, is good for anyone in the IT field, but I tend to get very drawn into projects and ignore the tech I don't use. I tend to view it as a quest for knowledge – like trying to collect all the Infinity Stones, but I didn't bother with the other ones because the green one is my favorite.
 
 So there you have it – I have a vision, passion, and a hunger for growth. Now, if you'll excuse me, I must carry on with my studies. Thanks for reading!
+
+
