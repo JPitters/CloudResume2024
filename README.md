@@ -32,9 +32,35 @@ npm run dev
 ## Tech Stack
 
 - [Astro](https://astro.build)
-    - [typescript] (strict)
-- [tailwindcss](https://tailwindcss.com/)
-- [DaisyUI](https://daisyui.com/)
+  - [mdx] (https://mdxjs.com/docs/)
+  - [tailwindcss] (https://tailwindcss.com/)
+  - [sitemap] (https://docs.astro.build/en/guides/integrations-guide/sitemap/)
+- [DaisyUI] (https://daisyui.com/)
+- [typescript] (strict)
+
+### The Big Question: "Why?"
+I whimsically decided to take on this project, some more about it can be found the website blog >>link?<<, but initially I intended to
+just throw together an SPA using React, TypeScript, and other dependencies as I seen fit. However, as everything can be an opptortunity,
+I found that this project idea is one that allows me to step out of my React-shaped comfort zone and try something different. So, I thought 
+to myself: "Hm... Vue? Angular?? Hard to choose, well I just want something fast." After a hop, a skip, and a quick google search on new 
+frameworks, I stumbled upon Angular! wait, no er- I mean, ASTRO.
+
+#### Astro
+Astro as a type of multi-managed, open web framework, has been peer reviewed as the newest framework to challenge the quality and speed of 
+the more popular web frameworks I previously name dropped. Astro spits on competition by also offering collaboration: they offer developers 
+the ability to integrate & utilize the functionalities of their favorite web framework. So, if I still wanted React in my tech, I could have 
+it, and that was highly attractive. Not to mention, Astro as a "content-driven"-focused framework, supports webpage speed by offering a new 
+frontend architecture that reduces JavaScript overhead & complexity where possible.
+
+#### TypeScript
+TypeScript as a scripting language is very versatile and encompasses the various functionalities of JavaScript, but is also the recommended 
+scripting language of choice by the Astro team.
+
+#### DaisyUI
+UX is very important for any good website. Dynamic themes add a lot to the UX for a web page, and DaisyUI offers a lot of support for 
+implementing just that. Even in the case that you'd like to develop your own themes, they encourage that on their website, showing how one can
+integrate it into their webpage.
+
 
 ## Project Structure
 
@@ -42,42 +68,47 @@ npm run dev
 ├── src/
 │   ├── components/
 │   │   ├── cv/
-│   │   │   ├── TimeLine
+│   │   │   └── TimeLine.astro
 │   │   ├── BaseHead.astro
 │   │   ├── Card.astro
 │   │   ├── Footer.astro
 │   │   ├── Header.astro
-│   │   └── HorizontalCard.astro
-│   │   └── SideBar.astro
-│   │   └── SideBarMenu.astro
-│   │   └── SideBarFooter.astro
-│   │   └── ThemeSelector.astro
+│   │   ├── HorizontalCard.astro
+│   │   ├── SideBar.astro
+│   │   ├── SideBarMenu.astro
+│   │   ├── SideBarFooter.astro
+│   │   ├── Themes.astro
+│   │   ├── ThemeSelector.astro
 │   │   └── ToolBar.astro
 │   ├── content/
 │   │   ├── blog/
 │   │   │   ├── post1.md
 │   │   │   ├── post2.md
 │   │   │   └── post3.md
-│   │   ├── store/
-│   │   │   ├── item1.md
-│   │   │   ├── item2.md
 │   ├── layouts/
-│   │   └── BaseLayout.astro
+│   │   ├── BaseLayout.astro
 │   │   └── PostLayout.astro
+│   ├── lib/
+│   │   ├── animateGif.ts
+│   │   └── createSlug.ts
 │   └── pages/
 │   │   ├── blog/
+│   │   │   ├── tag/
+│   │   │   │   ├── [tag]/
+│   │   │   │   │   └── [...page].astro
 │   │   │   ├── [...page].astro
-│   │   │   ├── [slug].astro
-│   │   └── cv.astro
-│   │   └── index.astro
-│   │   └── projects.astro
+│   │   │   ├── [...page].astro
+│   │   │   └── [slug].astro
+│   │   ├── cv.astro
+│   │   ├── index.astro
+│   │   ├── projects.astro
 │   │   └── rss.xml.js
 │   ├── styles/
 │   │   └── global.css
 │   └── config.ts
 ├── public/
 │   ├── favicon.svg
-│   └── profile.webp
+│   ├── profile.webp
 │   └── social_img.webp
 ├── astro.config.mjs
 ├── tailwind.config.cjs

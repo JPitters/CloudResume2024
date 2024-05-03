@@ -5,7 +5,7 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://jpitters.projectnimbus.com',
+  site: 'https://jpitters.com',
   integrations: [mdx(), sitemap(), tailwind()],
   base: '/',
 });
