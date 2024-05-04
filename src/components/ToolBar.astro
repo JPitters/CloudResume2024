@@ -28,7 +28,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         }
 
         connectedCallback() {
-            console.log("Custom element added to page.");
+            //console.log("Custom element added to page.");
             this.prep_Apps();
             this.tb_init();
             this.toggleClickCheck = undefined;
@@ -362,7 +362,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
 
         isHidden() {
             var res = this.toolbarContainer?.hasAttribute("data-hidden") ?? true
-            console.log("checking hidden -> " + res);
+            //console.log("checking hidden -> " + res);
             return res;
         }
 
@@ -381,7 +381,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
         
         // A method for toggling the canvas of a specific toolbar item
         toggleApp(item){
-            console.log("Toggle item on/ off");
+            //console.log("Toggle item on/ off");
             const status = item.getAttribute("active") == null; //find out if the item is not active
             var canvasName = undefined; // a variable to hold the id/ name of the canvas
             var canvas = null; // a variable to hold the canvas container
@@ -396,13 +396,13 @@ import ThemeSelector from "../components/ThemeSelector.astro";
             });
 
             if (canvasName == undefined || canvasName == "") {
-                console.log("failed to map to a registered item...");
+                //console.log("failed to map to a registered item...");
                 return;
             } else {
                 // The desired canvas object is already registered into the DOM, so we just need to call it...
                 canvas = document.getElementById(canvasName);
                 if (canvas == null) {
-                    console.log("...couldn't find ->> " + canvasName);
+                    //console.log("...couldn't find ->> " + canvasName);
                     return;
                 }
             }
@@ -436,7 +436,7 @@ import ThemeSelector from "../components/ThemeSelector.astro";
                 item.removeAttribute("active");
                 document.removeEventListener("mousedown", parent.toggleClickCheck); // for redundancy
                 parent.toggleClickCheck = undefined; // to overwrite functionality -- TODO: confirm no mem leak from this
-                console.log("Active app closed...");
+                //console.log("Active app closed...");
             }
         }
         

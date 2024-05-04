@@ -32,7 +32,7 @@ npm run dev
 ## Tech Stack
 
 - [Astro](https://astro.build)
-  - [mdx] (https://mdxjs.com/docs/)
+  - [mdx] (https://docs.astro.build/en/guides/integrations-guide/mdx/)
   - [tailwindcss] (https://tailwindcss.com/)
   - [sitemap] (https://docs.astro.build/en/guides/integrations-guide/sitemap/)
 - [DaisyUI] (https://daisyui.com/)
@@ -46,10 +46,10 @@ to myself: "Hm... Vue? Angular?? Hard to choose, well I just want something fast
 frameworks, I stumbled upon Angular! wait, no er- I mean, ASTRO.
 
 #### Astro
-Astro as a type of multi-managed, open web framework, has been peer reviewed as the newest framework to challenge the quality and speed of 
+Astro as a type of UI-agnostic, open web framework, has been peer reviewed as the newest framework to challenge the quality and speed of 
 the more popular web frameworks I previously name dropped. Astro spits on competition by also offering collaboration: they offer developers 
-the ability to integrate & utilize the functionalities of their favorite web framework. So, if I still wanted React in my tech, I could have 
-it, and that was highly attractive. Not to mention, Astro as a "content-driven"-focused framework, supports webpage speed by offering a new 
+the ability to integrate & utilize their favorite UI-focused web framework. So, if I still wanted React in my tech, I could have it, and 
+that was highly attractive. Not to mention, Astro as a "content-driven"-focused framework, supports webpage speed by offering a new 
 frontend architecture that reduces JavaScript overhead & complexity where possible.
 
 #### TypeScript
@@ -109,7 +109,7 @@ integrate it into their webpage.
 ├── public/
 │   ├── favicon.svg
 │   ├── profile.webp
-│   └── social_img.webp
+│   └── + several other images
 ├── astro.config.mjs
 ├── tailwind.config.cjs
 ├── package.json
@@ -165,30 +165,6 @@ URL" target="Optional link target (_blank default)" badge="Optional badge"
 tags={['Array','of','tags']} />
 ```
 
-#### HorizontalCard Shop Item
-
-This component comes from a template and is included in the Store layout. In case you want to use it in another place these are the props.
-
-```html
-<HorizontalShopItem
-  title="Item Title - Jordan's Product"
-  img="imge_url"
-  desc="Item description"
-  pricing="current_price"
-  oldPricing="old_price"
-  checkoutUrl="external store checkout url"
-  badge="Optional badge"
-  url="item details url"
-  custom_link="Custom link url"
-  custom_link_label="Cutom link btn label"
-  target="Optional link target (_self default)"
-/>
-```
-
-#### Unexplained Components
-
-Some components, like the ToolBar, are in the still in the development stage and a explaination of the full functionalities will be provided when developments reach a milestone of a  certain standard.
-
 
 ### Layouts
 
@@ -198,7 +174,17 @@ The BaseLayout defines a general template for each new webpage you want to add. 
 
 ### Theming
 
-To change the template theme change the `data-theme` attribute of the `<html>` tag in `BaseLayout.astro` file. There are two buttons available on the site: one in the Navbar only visible on smaller screens, and another in the tool bar that hovers above the navbar.
+To change the template theme change the `data-theme` attribute of the `<html>` tag in `BaseLayout.astro` file. There are two buttons available on the site: one in the Navbar (only visible on smaller screens), and another in the tool bar (only visible on mid to larger screens) that hovers above the navbar.
+
+### Tool Bar
+The `JordansToolBar` object is essentially a rip from Astro's dev tool bar, and is redesigned and re-purposed for the uses of this webpage. For the time being, it supports simple functions like icons or apps that the user can rely on for easy access.
+
+#### ThemeSelector
+The `ThemeSelector` is an object designed to reflect the theming functionalities of this website. It sits as an icon within the tool bar.
+
+### Library
+Found within the `src/lib` folder are files that support client-side scripting functionalities of the website. 
+
 
 ### Content
 

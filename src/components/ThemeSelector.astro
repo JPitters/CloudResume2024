@@ -4,7 +4,7 @@
 
 
 <script>
-import {allThemes} from "./Themes.astro";
+import {allThemes} from "../lib/Themes.astro";
 
     let mainContainer = "tool-bar";
     let canvasName = "jordans-themes-canvas";
@@ -36,7 +36,6 @@ import {allThemes} from "./Themes.astro";
         }
 
         initThemeSelection () {
-            //console.log("init theme selection");
             var container = document.getElementById(mainContainer);
             container?.append(document.createElement(canvasName));
 
